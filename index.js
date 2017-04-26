@@ -1,14 +1,14 @@
 var dataLink = 'https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/cyclist-data.json';
 
 var margin = {
-  top: 50,
-  right: 50,
-  bottom: 50,
-  left: 50
+  top: 100,
+  right: 100,
+  bottom: 100,
+  left: 100
 };
 
-var width = 700 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
+var width = 1000 - margin.left - margin.right;
+var height = 800 - margin.top - margin.bottom;
 
 var x = d3.scaleTime().range([width, 0]);
 var y = d3.scaleBand().range([0, height]);
@@ -55,10 +55,10 @@ d3.json(dataLink, data => {
 
   chart.selectAll('.dot')
     .data(data)
-    .enter().append('circle')
+    .enter().append('g')
+    .attr('transform', d => 'translate(' + x(d["Time"]) + ',' + y(d["Place"]) + ')')
     .attr('class', 'dot')
-    .attr('cx', d => x(d["Time"]))
-    .attr('cy', d => y(d["Place"]))
+    .append('circle')
     .attr('r', 4)
     .style('fill', d => d['Doping'] ? 'OrangeRed ' : 'SlateGrey ')
     .style('stroke', 'black')
@@ -77,5 +77,8 @@ d3.json(dataLink, data => {
 
   d3.selectAll('.dot')
     .append('text')
-    .value(d => d['Name']);
+    .attr('class', 'text')
+    .attr('dy', '0.4em')
+    .attr('dx', '0.8em')
+    .text(d => d['Name']);
 });
